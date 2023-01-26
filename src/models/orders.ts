@@ -36,15 +36,16 @@ export class OrderStore {
             }
     } 
 
-    async create(o:Orders): Promise<Orders> {
+    async create(o:Orders): Promise<Orders | null> {
         try {
             const sql = `INSERT INTO orders (product_id, user_id, status_of_order, quantity) VALUES ($1, $2, $3, $4)`
             const conn = await DB.connect()
             const result = await conn.query(sql, [ o.product_id, o.user_id, o.status_of_order, o.quantity ])
-            const order = result.rows[0]
-
-            conn.release()
-            return order
+            if(result.rows.length){
+                const order = result.rows[0]
+                return order
+            }
+         return null;
             
         }catch(err) {
             throw new Error(`Could not add  order. Error:${err}`)

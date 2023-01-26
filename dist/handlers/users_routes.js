@@ -35,8 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var users_1 = require("../models/users");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var dotenv_1 = __importDefault(require("dotenv"));
+var authRouteGuard_1 = __importDefault(require("../middleware/authRouteGuard"));
+dotenv_1.default.config();
 var store = new users_1.UserStore();
 var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
@@ -89,9 +96,40 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+var login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var username, password, newUser, SECRET_KEY, token, err_2;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                username = req.body.username;
+                password = req.body.password;
+                return [4 /*yield*/, store.signIn(username, password)];
+            case 1:
+                newUser = _b.sent();
+                SECRET_KEY = process.env.SECRET_KEY;
+                if (newUser) {
+                    token = jsonwebtoken_1.default.sign({ _id: (_a = newUser.id) === null || _a === void 0 ? void 0 : _a.toString(), name: newUser.firstName }, SECRET_KEY);
+                    return [2 /*return*/, res.status(201).json({ token: token })];
+                }
+                else {
+                    return [2 /*return*/, res.status(401).json({ msg: 'Invalid username or password' })];
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                err_2 = _b.sent();
+                res.status(400);
+                res.json(err_2);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 var userRoutes = function (app) {
-    app.get('/users', index);
-    app.get('/user/:id', show);
-    app.post('/user', create);
+    app.get('/users', authRouteGuard_1.default, index);
+    app.get('/user/:id', authRouteGuard_1.default, show);
+    app.post('/user', authRouteGuard_1.default, create);
+    app.post('/user', login);
 };
 exports.default = userRoutes;

@@ -45,19 +45,19 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
             case 0: return [4 /*yield*/, store.index()];
             case 1:
                 orders = _a.sent();
-                res.json(orders);
+                res.status(200).json(orders);
                 return [2 /*return*/];
         }
     });
 }); };
 var userOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product;
+    var orderByUser;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, store.userOrder(req.body.user_id)];
             case 1:
-                product = _a.sent();
-                res.json(product);
+                orderByUser = _a.sent();
+                res.status(200).json(orderByUser);
                 return [2 /*return*/];
         }
     });
@@ -78,7 +78,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(orders)];
             case 1:
                 newOrders = _a.sent();
-                res.json(newOrders);
+                res.status(201).json(newOrders);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();

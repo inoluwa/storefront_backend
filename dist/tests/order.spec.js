@@ -39,84 +39,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductStore = void 0;
-var database_1 = __importDefault(require("../database"));
-var ProductStore = /** @class */ (function () {
-    function ProductStore() {
-    }
-    ProductStore.prototype.getAllProducts = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_1;
+var index_1 = __importDefault(require("../index"));
+var supertest_1 = __importDefault(require("supertest"));
+var request = (0, supertest_1.default)(index_1.default);
+//Test for order
+describe('Testing the   endpoint for order ', function () { return __awaiter(void 0, void 0, void 0, function () {
+    var order;
+    return __generator(this, function (_a) {
+        order = {
+            "order_name": "Electric Fan",
+            "price": 15,
+            "category": "Home appliances"
+        };
+        it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1.default.connect()];
+                    case 0: return [4 /*yield*/, request.post("/orders").send(order)];
                     case 1:
-                        conn = _a.sent();
-                        sql = 'SELECT * FROM products';
-                        return [4 /*yield*/, conn.query(sql)];
-                    case 2:
-                        result = _a.sent();
-                        conn.release();
-                        return [2 /*return*/, result.rows];
-                    case 3:
-                        err_1 = _a.sent();
-                        throw new Error("Cannot get products. Error:".concat(err_1));
-                    case 4: return [2 /*return*/];
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(201);
+                        return [2 /*return*/];
                 }
             });
-        });
-    };
-    ProductStore.prototype.getProductById = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_2;
+        }); });
+        it('Testing  GET all orders API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = "SELECT * FROM products WHERE id = ($1)";
-                        return [4 /*yield*/, database_1.default.connect()];
+                    case 0: return [4 /*yield*/, request.get("/orders")];
                     case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [id])];
-                    case 2:
-                        result = _a.sent();
-                        conn.release();
-                        return [2 /*return*/, result.rows];
-                    case 3:
-                        err_2 = _a.sent();
-                        throw new Error("Couldn't find a product ".concat(id, ". Error:").concat(err_2));
-                    case 4: return [2 /*return*/];
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(200);
+                        return [2 /*return*/];
                 }
             });
-        });
-    };
-    ProductStore.prototype.createProduct = function (p) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_3;
+        }); });
+        it('Testing  GET all orders ById ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO products (product_name, price, category) VALUES ($1, $2, $3)";
-                        return [4 /*yield*/, database_1.default.connect()];
+                    case 0: return [4 /*yield*/, request.get("/order/".concat(1))];
                     case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [p.product_name, p.price, p.category])];
-                    case 2:
-                        result = _a.sent();
-                        conn.release();
-                        //const product 
-                        return [2 /*return*/, result.rows[0]];
-                    case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Couldn't add product. Error:".concat(err_3));
-                    case 4: return [2 /*return*/];
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(200);
+                        return [2 /*return*/];
                 }
             });
-        });
-    };
-    return ProductStore;
-}());
-exports.ProductStore = ProductStore;
+        }); });
+        return [2 /*return*/];
+    });
+}); });

@@ -106,9 +106,11 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [o.product_id, o.user_id, o.status_of_order, o.quantity])];
                     case 2:
                         result = _a.sent();
-                        order = result.rows[0];
-                        conn.release();
-                        return [2 /*return*/, order];
+                        if (result.rows.length) {
+                            order = result.rows[0];
+                            return [2 /*return*/, order];
+                        }
+                        return [2 /*return*/, null];
                     case 3:
                         err_3 = _a.sent();
                         throw new Error("Could not add  order. Error:".concat(err_3));

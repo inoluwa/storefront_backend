@@ -41,6 +41,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserStore = void 0;
 var database_1 = __importDefault(require("../database"));
+var bcryptjs_1 = __importDefault(require("bcryptjs"));
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 var UserStore = /** @class */ (function () {
     function UserStore() {
     }
@@ -68,9 +71,39 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
+    UserStore.prototype.signIn = function (username, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, result, user, pepper, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1.default.connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = 'SELECT id, username, lastname, firstname FROM users where username=($1) ';
+                        return [4 /*yield*/, conn.query(sql, [username])];
+                    case 2:
+                        result = _a.sent();
+                        if (result.rows.length) {
+                            user = result.rows[0];
+                            pepper = process.env.pepper;
+                            if (bcryptjs_1.default.compareSync(password + pepper, user.password)) {
+                                return [2 /*return*/, user];
+                            }
+                        }
+                        return [2 /*return*/, null];
+                    case 3:
+                        err_2 = _a.sent();
+                        throw new Error("Cannot get users. Error:".concat(err_2));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     UserStore.prototype.show = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_2;
+            var sql, conn, result, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -85,8 +118,8 @@ var UserStore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
-                        err_2 = _a.sent();
-                        throw new Error("Couldn't find user with ".concat(id, ". Error:").concat(err_2));
+                        err_3 = _a.sent();
+                        throw new Error("Couldn't find user with ".concat(id, ". Error:").concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -94,24 +127,27 @@ var UserStore = /** @class */ (function () {
     };
     UserStore.prototype.create = function (u) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, user, err_3;
+            var sql, pepper, saltRounds, conn, hash, result, user, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         sql = "INSERT INTO users (username, lastname, firstname, bcrypt_password) VALUES ($1, $2, $3, $4)";
+                        pepper = process.env.pepper;
+                        saltRounds = process.env.saltRounds;
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [u.firstName, u.lastName, u.password])];
+                        hash = bcryptjs_1.default.hashSync(u.password + pepper, parseInt(saltRounds));
+                        return [4 /*yield*/, conn.query(sql, [u.username, u.firstName, u.lastName, hash])];
                     case 2:
                         result = _a.sent();
                         user = result.rows[0];
                         conn.release();
                         return [2 /*return*/, user];
                     case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Couldn't create user. Error:".concat(err_3));
+                        err_4 = _a.sent();
+                        throw new Error("Couldn't create user. Error:".concat(err_4));
                     case 4: return [2 /*return*/];
                 }
             });

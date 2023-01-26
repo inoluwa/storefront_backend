@@ -43,15 +43,15 @@ var index_1 = __importDefault(require("../index"));
 var supertest_1 = __importDefault(require("supertest"));
 var request = (0, supertest_1.default)(index_1.default);
 //Test for product
-describe('Testing the  image endpoint ', function () { return __awaiter(void 0, void 0, void 0, function () {
+describe('Testing the   endpoint for Product ', function () { return __awaiter(void 0, void 0, void 0, function () {
     var product;
     return __generator(this, function (_a) {
         product = {
-            "product_name": "Electric fannjknn",
+            "product_name": "Electric Fan",
             "price": 15,
             "category": "Home appliances"
         };
-        it('Testing  Product API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
             var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -59,6 +59,30 @@ describe('Testing the  image endpoint ', function () { return __awaiter(void 0, 
                     case 1:
                         response = _a.sent();
                         expect(response.statusCode).toEqual(201);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Testing  GET all Products API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request.get("/products")];
+                    case 1:
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(200);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Testing  GET all Products ById ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request.get("/product/".concat(1))];
+                    case 1:
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(200);
                         return [2 /*return*/];
                 }
             });

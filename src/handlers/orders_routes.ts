@@ -6,13 +6,13 @@ const store = new OrderStore()
 
 const index = async(_req:Request, res:Response ) => {
     const orders = await store.index()
-    res.json(orders)
+    res.status(200).json(orders);
 }
 
 
 const userOrder = async(req:Request, res:Response) => {
-    const product = await store.userOrder(req.body.user_id)
-    res.json(product)
+    const orderByUser = await store.userOrder(req.body.user_id)
+    res.status(200).json(orderByUser);
 }
 
 
@@ -27,7 +27,7 @@ const create = async(req:Request, res:Response) => {
         }
 
        const newOrders = await store.create(orders)
-       res.json(newOrders)
+       res.status(201).json(newOrders)
      }catch(err) {
         res.status(400)
         res.json(err)

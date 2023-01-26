@@ -4,15 +4,15 @@ import { Product, ProductStore} from '../models/products'
 
 const store = new ProductStore()
 
-const index = async(_req:Request, res:Response ) => {
-    const products = await store.index()
-    res.json(products)
+const getAllProducts = async(_req:Request, res:Response ) => {
+    const products = await store.getAllProducts()
+    res.status(200).json(products)
 }
 
 
-const show = async(req:Request, res:Response) => {
-    const product = await store.show(req.params.id)
-    res.json(product)
+const getProductById = async(req:Request, res:Response) => {
+    const product = await store.getProductById(req.params.id)
+    res.status(200).json(product)
 }
 
 
@@ -25,7 +25,7 @@ const create = async(req:Request, res:Response) => {
             category:req.body.category
         }
         
-       const newproduct = await store.create(product)
+       const newproduct = await store.createProduct(product)
        res.status(201).json(newproduct)
      }catch(err) {
         res.status(400)
@@ -34,8 +34,8 @@ const create = async(req:Request, res:Response) => {
 }
 
 const productRoutes = (app: express.Application) => {
-    app.get('/products', index)
-    app.get('/product/:id', show)
+    app.get('/products', getAllProducts)
+    app.get('/product/:id', getProductById)
     app.post('/product', create)
   }
   

@@ -35,62 +35,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var products_1 = require("../models/products");
-var store = new products_1.ProductStore();
-var getAllProducts = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var products;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.getAllProducts()];
-            case 1:
-                products = _a.sent();
-                res.status(200).json(products);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var getProductById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.getProductById(req.params.id)];
-            case 1:
-                product = _a.sent();
-                res.status(200).json(product);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, newproduct, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                product = {
-                    id: req.body.id,
-                    product_name: req.body.product_name,
-                    price: req.body.price,
-                    category: req.body.category
-                };
-                return [4 /*yield*/, store.createProduct(product)];
-            case 1:
-                newproduct = _a.sent();
-                res.status(201).json(newproduct);
-                return [3 /*break*/, 3];
-            case 2:
-                err_1 = _a.sent();
-                res.status(400);
-                res.json(err_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-var productRoutes = function (app) {
-    app.get('/products', getAllProducts);
-    app.get('/product/:id', getProductById);
-    app.post('/product', create);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.default = productRoutes;
+Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = __importDefault(require("../index"));
+var supertest_1 = __importDefault(require("supertest"));
+var users_1 = require("../models/users");
+var request = (0, supertest_1.default)(index_1.default);
+var store = new users_1.UserStore();
+//Test for user
+describe('Testing the  endpoint for User Signin ', function () { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        user = {
+            "username": "myheader",
+            "password": '123456',
+        };
+        it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request.post("/login").send(user)];
+                    case 1:
+                        response = _a.sent();
+                        expect(response.statusCode).toEqual(201);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        return [2 /*return*/];
+    });
+}); });
+// describe('Testing the  endpoint for Middleware Guard ',() => {
+// it("should require authorization on every endpoint", (done) => {
+//   request
+//   .get("/users")
+//   .then((res) => {
+//     expect(res.status).toBe(401)
+//     done()
+//   }) 
+// });
+// });
