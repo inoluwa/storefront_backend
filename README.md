@@ -6,28 +6,21 @@ The Environment variable needed (.env):
 - POSTGRES_HOST=localhost
 - POSTGRES_DB=project_db
 - POSTGRES_USER=postgres
-- POSTGRES_PASSWORD=12345
+- POSTGRES_PASSWORD=####
 - POSTGRES_PORT=5432
 - saltRounds=10
-- pepper=loabdead
+- pepper=#####
 - SECRET_KEY=blalablue
 
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine for testing
+
 
 ## Set up
 - docker-compose up to start the docker container
 - npm install to install all dependencies
-- npm run db-up to set up the database and get access via http://127.0.0.1:5432
-
-## Ports
+- db-migrate up
+- npm run start to run the project
+## Ports 
 - port 3000 with database on 5432.
 
 ## Building and starting the project
