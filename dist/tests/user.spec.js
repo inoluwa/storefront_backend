@@ -41,32 +41,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = __importDefault(require("../index"));
 var supertest_1 = __importDefault(require("supertest"));
-var users_1 = require("../models/users");
 var request = (0, supertest_1.default)(index_1.default);
-var store = new users_1.UserStore();
 //Test for user
-describe('Testing the  endpoint for User Signin ', function () { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        user = {
-            "username": "myheader",
-            "password": '123456',
-        };
-        it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post("/login").send(user)];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.statusCode).toEqual(201);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        return [2 /*return*/];
-    });
-}); });
+describe('Testing the  endpoint for User Signin ', function () {
+    var username = "myheader";
+    var password = '123456';
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = {
+                        username: username,
+                        password: password,
+                        firstName: 'kj',
+                        lastName: 'nm'
+                    };
+                    return [4 /*yield*/, request.post("/user/create").send(user)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = {
+                        username: username,
+                        password: password,
+                    };
+                    console.log("mmmmm", user);
+                    return [4 /*yield*/, request.post("/user/login").send(user)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(201);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
 // describe('Testing the  endpoint for Middleware Guard ',() => {
 // it("should require authorization on every endpoint", (done) => {
 //   request

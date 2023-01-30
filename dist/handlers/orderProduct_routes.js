@@ -36,60 +36,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var products_1 = require("../models/products");
-var store = new products_1.ProductStore();
-var getAllProducts = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var products;
+var order_product_1 = require("../models/order_product");
+var store = new order_product_1.OrderProductStore();
+var getAllOrderProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orderProducts;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.getAllProducts()];
+            case 0: return [4 /*yield*/, store.AllOrderProduct()];
             case 1:
-                products = _a.sent();
-                res.status(200).json(products);
+                orderProducts = _a.sent();
+                res.status(200).json(orderProducts);
                 return [2 /*return*/];
         }
     });
 }); };
-var getTopFiveProducts = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var products;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.getProductTopFive()];
-            case 1:
-                products = _a.sent();
-                res.status(200).json(products);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var getProductById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, store.getProductById(req.params.id)];
-            case 1:
-                product = _a.sent();
-                res.status(200).json(product);
-                return [2 /*return*/];
-        }
-    });
-}); };
-var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, newproduct, err_1;
+var addProductToOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var order_id, product_id, quantity, product, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                product = {
-                    id: req.body.id,
-                    product_name: req.body.product_name,
-                    price: req.body.price,
-                    category: req.body.category
-                };
-                return [4 /*yield*/, store.createProduct(product)];
+                order_id = parseInt(req.params.id);
+                product_id = parseInt(req.body.product_id);
+                quantity = parseInt(req.body.quantity);
+                if (!order_id || !product_id || !quantity) {
+                    return [2 /*return*/, res.status(400).json({
+                            error: 'One or more required parameters missing',
+                        })];
+                }
+                return [4 /*yield*/, store.addProductToOrder({
+                        order_id: order_id,
+                        product_id: product_id,
+                        quantity: quantity,
+                    })];
             case 1:
-                newproduct = _a.sent();
-                res.status(201).json(newproduct);
+                product = _a.sent();
+                res.status(200).json(product);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -100,10 +82,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
-var productRoutes = function (app) {
-    app.get('/products', getAllProducts);
-    app.get('/product/:id', getProductById);
-    app.get('/product/top', getTopFiveProducts);
-    app.post('/product', create);
+var orderProductRoutes = function (app) {
+    app.get('/order-products', getAllOrderProduct);
+    app.post('/add-product', addProductToOrder);
 };
-exports.default = productRoutes;
+exports.default = orderProductRoutes;

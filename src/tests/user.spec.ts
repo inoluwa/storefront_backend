@@ -1,20 +1,36 @@
 
 import index from '../index';
 import supertest from 'supertest';
-import { Users, UserStore } from '../models/users';
+import { UserStore } from '../models/users';
 
 
 const request = supertest(index);
-const store = new UserStore()
+
 //Test for user
-describe('Testing the  endpoint for User Signin ',async() => {
-  const user=  {
-        "username":"myheader",
-        "password":'123456', 
-    }
+describe('Testing the  endpoint for User Signin ',() => {
+  const username = "myheader";
+  const password= '123456';
+  beforeAll(async () => {
+  const user =  {
+    username,
+    password,
+    firstName: 'kj',
+    lastName: 'nm'
+  }
+
+ await  request.post(`/user/create`).send(user);
+
+
+})
+ 
     
   it('Testing Create API ',   async () => {
-  const response= await request.post(`/login`).send(user);
+
+    const user=  {
+      username,
+      password, 
+      }
+  const response= await request.post(`/user/login`).send(user);
 expect(response.statusCode).toEqual(201);     
   });
 

@@ -1,8 +1,17 @@
 # Storefront Backend Project
 
-## Getting Started
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+## Getting Started
+The Environment variable needed (.env):
+- POSTGRES_HOST=localhost
+- POSTGRES_DB=project_db
+- POSTGRES_USER=postgres
+- POSTGRES_PASSWORD=12345
+- POSTGRES_PORT=5432
+- saltRounds=10
+- pepper=loabdead
+- SECRET_KEY=blalablue
+
 
 ## Required Technologies
 Your application must make use of the following libraries:
@@ -11,7 +20,20 @@ Your application must make use of the following libraries:
 - dotenv from npm for managing environment variables
 - db-migrate from npm for migrations
 - jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+- jasmine for testing
+
+## Set up
+- docker-compose up to start the docker container
+- npm install to install all dependencies
+- npm run db-up to set up the database and get access via http://127.0.0.1:5432
+
+## Ports
+- port 3000 with database on 5432.
+
+## Building and starting the project
+- npm run test to run both build and jasmine
+
+
 
 ## Steps to Completion
 

@@ -39,12 +39,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderStore = void 0;
+exports.OrderProductStore = void 0;
 var database_1 = __importDefault(require("../database"));
-var OrderStore = /** @class */ (function () {
-    function OrderStore() {
+var OrderProductStore = /** @class */ (function () {
+    function OrderProductStore() {
     }
-    OrderStore.prototype.getAllOrders = function () {
+    OrderProductStore.prototype.AllOrderProduct = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_1;
             return __generator(this, function (_a) {
@@ -54,7 +54,7 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM orders';
+                        sql = 'SELECT * FROM orderProduct';
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -68,57 +68,34 @@ var OrderStore = /** @class */ (function () {
             });
         });
     };
-    OrderStore.prototype.currentUserOrder = function (user_id) {
+    OrderProductStore.prototype.addProductToOrder = function (p) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_2;
+            var sql, connection, result, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
+                        sql = 'INSERT INTO order_products (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
-                        conn = _a.sent();
-                        sql = 'SELECT * FROM orders WHERE user_id = ($1);';
-                        return [4 /*yield*/, conn.query(sql, [user_id])];
+                        connection = _a.sent();
+                        return [4 /*yield*/, connection.query(sql, [
+                                p.order_id,
+                                p.product_id,
+                                p.quantity,
+                            ])];
                     case 2:
                         result = _a.sent();
-                        conn.release();
+                        connection.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
                         err_2 = _a.sent();
-                        throw new Error("Cannot get orders. Error:".concat(err_2));
+                        throw new Error("Product could not be added. Error: ".concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    OrderStore.prototype.create = function (o) {
-        return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, order, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2)";
-                        return [4 /*yield*/, database_1.default.connect()];
-                    case 1:
-                        conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [o.user_id, o.status_of_order])];
-                    case 2:
-                        result = _a.sent();
-                        if (result.rows.length) {
-                            order = result.rows[0];
-                            return [2 /*return*/, order];
-                        }
-                        return [2 /*return*/, null];
-                    case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Could not add  order. Error:".concat(err_3));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return OrderStore;
+    return OrderProductStore;
 }());
-exports.OrderStore = OrderStore;
+exports.OrderProductStore = OrderProductStore;

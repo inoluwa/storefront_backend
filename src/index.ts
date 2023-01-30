@@ -2,6 +2,7 @@ import express from "express";
 import orderRoutes from "./handlers/orders_routes";
 import productRoutes from "./handlers/products_routes"
 import userRoutes from "./handlers/users_routes"
+import orderProductRoutes from "./handlers/orderProduct_routes"
 import bodyParser from 'body-parser'
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.json())
 orderRoutes(app)
 productRoutes(app)
 userRoutes(app)
+orderProductRoutes(app)
 
 
 

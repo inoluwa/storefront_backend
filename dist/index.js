@@ -7,6 +7,7 @@ var express_1 = __importDefault(require("express"));
 var orders_routes_1 = __importDefault(require("./handlers/orders_routes"));
 var products_routes_1 = __importDefault(require("./handlers/products_routes"));
 var users_routes_1 = __importDefault(require("./handlers/users_routes"));
+var orderProduct_routes_1 = __importDefault(require("./handlers/orderProduct_routes"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var app = (0, express_1.default)();
 var port = 3000;
@@ -15,6 +16,7 @@ app.use(body_parser_1.default.json());
 (0, orders_routes_1.default)(app);
 (0, products_routes_1.default)(app);
 (0, users_routes_1.default)(app);
+(0, orderProduct_routes_1.default)(app);
 app.listen(port, function () {
     console.log("Server running at ".concat(port));
 });

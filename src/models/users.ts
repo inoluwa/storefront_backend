@@ -1,19 +1,15 @@
 import DB from '../database'
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv'
+import { Users } from '../interfaces/user.interface';
+
 
 
 dotenv.config() 
-export type Users = {
-    id:number;
-    username: string;
-    firstName:string;
-    lastName:string;
-    password:string;
-}
+
 
 export class UserStore {
-   async index(): Promise<Users[]> {
+   async getAllUsers(): Promise<Users[]> {
         try{
             const conn = await DB.connect()
             const sql = 'SELECT id, username, lastname, firstname FROM users'
@@ -28,8 +24,8 @@ export class UserStore {
    async signIn(username: string,  password: string): Promise<Users | null> {
         try{
             const conn = await DB.connect()
-            const sql = 'SELECT id, username, lastname, firstname FROM users where username=($1) '
-            
+            const sql = `SELECT * FROM users where username= ($1) `
+          
             const result = await conn.query(sql, [username  ] )
             if(result.rows.length){
                 const user = result.rows[0];
@@ -60,7 +56,7 @@ export class UserStore {
 
     async create(u:Users): Promise<Users> {
         try {
-            const sql = `INSERT INTO users (username, lastname, firstname, bcrypt_password) VALUES ($1, $2, $3, $4)`
+            const sql = `INSERT INTO users (username, lastname, firstname, password) VALUES ($1, $2, $3, $4) RETURNING  *`
             const  pepper=process.env.pepper
             const  saltRounds=process.env.saltRounds as string
             const conn = await DB.connect()
@@ -69,14 +65,18 @@ export class UserStore {
                 parseInt(saltRounds)
              );
             const result = await conn.query(sql, [u.username, u.firstName, u.lastName, hash ])
-            const user = result.rows[0]
-
+           
+//console.log(user)
             conn.release()
+            const user = result.rows[0]
+           
             return user
             
         }catch(err) {
+            console.log(err)
             throw new Error(`Couldn't create user. Error:${err}`)
         }
     }
     
 }
+

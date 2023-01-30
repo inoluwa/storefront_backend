@@ -38,11 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var orders_1 = require("../models/orders");
 var store = new orders_1.OrderStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var allOrders = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var orders;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
+            case 0: return [4 /*yield*/, store.getAllOrders()];
             case 1:
                 orders = _a.sent();
                 res.status(200).json(orders);
@@ -50,11 +50,11 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
-var userOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var getCurrentuserOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var orderByUser;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.userOrder(req.body.user_id)];
+            case 0: return [4 /*yield*/, store.currentUserOrder(req.body.user_id)];
             case 1:
                 orderByUser = _a.sent();
                 res.status(200).json(orderByUser);
@@ -69,11 +69,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 orders = {
-                    id: req.body.id,
-                    product_id: req.body.product_id,
                     user_id: req.body.user_id,
-                    status_of_order: req.body.status_of_order,
-                    quantity: req.body.quantity
+                    status_of_order: req.body.status_of_order
                 };
                 return [4 /*yield*/, store.create(orders)];
             case 1:
@@ -90,8 +87,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var orderRoutes = function (app) {
-    app.get('/orders', index);
-    app.get('/order/:id', userOrder);
-    app.post('/orders', create);
+    app.get('/orders', allOrders);
+    app.get('/current-user/:id', getCurrentuserOrder);
+    app.post('/create-order', create);
 };
 exports.default = orderRoutes;

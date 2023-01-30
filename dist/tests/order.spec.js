@@ -41,52 +41,70 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = __importDefault(require("../index"));
 var supertest_1 = __importDefault(require("supertest"));
+var users_1 = require("../models/users");
+var store = new users_1.UserStore();
 var request = (0, supertest_1.default)(index_1.default);
 //Test for order
-describe('Testing the   endpoint for order ', function () { return __awaiter(void 0, void 0, void 0, function () {
-    var order;
-    return __generator(this, function (_a) {
-        order = {
-            "order_name": "Electric Fan",
-            "price": 15,
-            "category": "Home appliances"
-        };
-        it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post("/orders").send(order)];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.statusCode).toEqual(201);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('Testing  GET all orders API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get("/orders")];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.statusCode).toEqual(200);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('Testing  GET all orders ById ', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get("/order/".concat(1))];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.statusCode).toEqual(200);
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        return [2 /*return*/];
-    });
-}); });
+describe('Testing the   endpoint for order ', function () {
+    var userId;
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user, userInfo;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = {
+                        username: "myheader",
+                        password: '123456',
+                        firstName: 'kj',
+                        lastName: 'nm'
+                    };
+                    return [4 /*yield*/, request.post("/user/create").send(user)];
+                case 1:
+                    userInfo = _a.sent();
+                    userId = userInfo.body.id;
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var order, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    order = {
+                        user_id: userId,
+                        status_of_order: true
+                    };
+                    return [4 /*yield*/, request.post("/create-order").send(order)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(201);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Testing  GET all orders API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/orders")];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Testing  GET all orders ById ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/current-user/".concat(1))];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

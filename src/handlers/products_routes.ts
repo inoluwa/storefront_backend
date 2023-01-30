@@ -1,5 +1,6 @@
 import express, {Request, Response}from 'express'
-import { Product, ProductStore} from '../models/products'
+import { Product } from '../interfaces/product.interface'
+import { ProductStore } from '../models/products'
 
 
 const store = new ProductStore()
@@ -9,6 +10,10 @@ const getAllProducts = async(_req:Request, res:Response ) => {
     res.status(200).json(products)
 }
 
+const getTopFiveProducts = async(_req:Request, res:Response ) => {
+    const products = await store.getProductTopFive()
+    res.status(200).json(products)
+}
 
 const getProductById = async(req:Request, res:Response) => {
     const product = await store.getProductById(req.params.id)
@@ -36,6 +41,7 @@ const create = async(req:Request, res:Response) => {
 const productRoutes = (app: express.Application) => {
     app.get('/products', getAllProducts)
     app.get('/product/:id', getProductById)
+    app.get('/product/top', getTopFiveProducts)
     app.post('/product', create)
   }
   

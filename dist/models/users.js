@@ -47,7 +47,7 @@ dotenv_1.default.config();
 var UserStore = /** @class */ (function () {
     function UserStore() {
     }
-    UserStore.prototype.index = function () {
+    UserStore.prototype.getAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_1;
             return __generator(this, function (_a) {
@@ -81,10 +81,11 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT id, username, lastname, firstname FROM users where username=($1) ';
+                        sql = "SELECT * FROM users where username= ($1) ";
                         return [4 /*yield*/, conn.query(sql, [username])];
                     case 2:
                         result = _a.sent();
+                        console.log("----", result.rows);
                         if (result.rows.length) {
                             user = result.rows[0];
                             pepper = process.env.pepper;
@@ -132,21 +133,25 @@ var UserStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO users (username, lastname, firstname, bcrypt_password) VALUES ($1, $2, $3, $4)";
+                        sql = "INSERT INTO users (username, lastname, firstname, password) VALUES ($1, $2, $3, $4) RETURNING  *";
                         pepper = process.env.pepper;
                         saltRounds = process.env.saltRounds;
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
                         hash = bcryptjs_1.default.hashSync(u.password + pepper, parseInt(saltRounds));
-                        return [4 /*yield*/, conn.query(sql, [u.username, u.firstName, u.lastName, hash])];
+                        return [4 /*yield*/, conn.query(sql, [u.username, u.firstName, u.lastName, hash])
+                            //console.log(user)
+                        ];
                     case 2:
                         result = _a.sent();
-                        user = result.rows[0];
+                        //console.log(user)
                         conn.release();
+                        user = result.rows[0];
                         return [2 /*return*/, user];
                     case 3:
                         err_4 = _a.sent();
+                        console.log(err_4);
                         throw new Error("Couldn't create user. Error:".concat(err_4));
                     case 4: return [2 /*return*/];
                 }

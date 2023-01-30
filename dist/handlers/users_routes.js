@@ -45,11 +45,11 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var authRouteGuard_1 = __importDefault(require("../middleware/authRouteGuard"));
 dotenv_1.default.config();
 var store = new users_1.UserStore();
-var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var getAllUsers = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, store.index()];
+            case 0: return [4 /*yield*/, store.getAllUsers()];
             case 1:
                 users = _a.sent();
                 res.json(users);
@@ -76,7 +76,6 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 user = {
-                    id: req.body.id,
                     username: req.body.username,
                     firstName: req.body.firstname,
                     lastName: req.body.lastname,
@@ -85,8 +84,7 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(user)];
             case 1:
                 newUser = _a.sent();
-                res.status(201).json(newUser);
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(201).json(newUser)];
             case 2:
                 err_1 = _a.sent();
                 res.status(400);
@@ -111,7 +109,7 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 SECRET_KEY = process.env.SECRET_KEY;
                 if (newUser) {
                     token = jsonwebtoken_1.default.sign({ _id: (_a = newUser.id) === null || _a === void 0 ? void 0 : _a.toString(), name: newUser.firstName }, SECRET_KEY);
-                    return [2 /*return*/, res.status(201).json({ token: token })];
+                    return [2 /*return*/, res.status(201).json({ token: token, id: newUser.id })];
                 }
                 else {
                     return [2 /*return*/, res.status(401).json({ msg: 'Invalid username or password' })];
@@ -127,9 +125,9 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 var userRoutes = function (app) {
-    app.get('/users', authRouteGuard_1.default, index);
+    app.get('/users', authRouteGuard_1.default, getAllUsers);
     app.get('/user/:id', authRouteGuard_1.default, show);
-    app.post('/user', authRouteGuard_1.default, create);
-    app.post('/user', login);
+    app.post('/user/create', create);
+    app.post('/user/login', login);
 };
 exports.default = userRoutes;

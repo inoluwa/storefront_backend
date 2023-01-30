@@ -1,11 +1,7 @@
 import DB from '../database'
+import { Product } from '../interfaces/product.interface'
 
-export type Product = {
-    id:number;
-    product_name:string;
-    price:number;
-    category:string;
-}
+
 
 export class ProductStore {
    async getAllProducts(): Promise<Product[]> {
@@ -28,12 +24,24 @@ export class ProductStore {
             const result = await conn.query(sql, [id])
 
             conn.release()
-            return result.rows
+            return result.rows[0]
         }catch(err) {
             throw new Error(`Couldn't find a product ${id}. Error:${err}`)
         }
     }
+    async getProductTopFive(): Promise<Product[]> {
+        try{
+            const sql = `SELECT * FROM products order by id asc
+            limit 5`
+            const conn = await DB.connect()
+            const result = await conn.query(sql)
 
+            conn.release()
+            return result.rows
+        }catch(err) {
+            throw new Error(`Couldn't find a product . Error:${err}`)
+        }
+    }
     async createProduct(p: Product): Promise<Product> {
         try {
             const sql = `INSERT INTO products (product_name, price, category) VALUES ($1, $2, $3)`

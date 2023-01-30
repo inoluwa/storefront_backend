@@ -1,15 +1,10 @@
 import DB from '../database'
+import { Order } from '../interfaces/order.interface'
 
-export type Orders = {
-    id:number;
-    product_id:number;
-    user_id:number;
-    status_of_order:string;
-    quantity:number;
-}
 
 export class OrderStore {
-    async index(): Promise<Orders[]> {
+    
+    async getAllOrders(): Promise<Order[]> {
         try{
             const conn = await DB.connect()
             const sql = 'SELECT * FROM orders'
@@ -23,7 +18,7 @@ export class OrderStore {
     }
 
 
-        async userOrder(user_id:number): Promise<Orders> {
+        async currentUserOrder(user_id:number): Promise<Order> {
             try{
                 const conn = await DB.connect()
                 const sql = 'SELECT * FROM orders WHERE user_id = ($1);'
@@ -36,11 +31,11 @@ export class OrderStore {
             }
     } 
 
-    async create(o:Orders): Promise<Orders | null> {
+    async create(o:Order): Promise<Order | null> {
         try {
-            const sql = `INSERT INTO orders (product_id, user_id, status_of_order, quantity) VALUES ($1, $2, $3, $4)`
+            const sql = `INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2)`
             const conn = await DB.connect()
-            const result = await conn.query(sql, [ o.product_id, o.user_id, o.status_of_order, o.quantity ])
+            const result = await conn.query(sql, [  o.user_id, o.status_of_order  ])
             if(result.rows.length){
                 const order = result.rows[0]
                 return order
@@ -51,6 +46,7 @@ export class OrderStore {
             throw new Error(`Could not add  order. Error:${err}`)
         }
     }
+
 }
 
  
