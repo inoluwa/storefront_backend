@@ -85,7 +85,6 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [username])];
                     case 2:
                         result = _a.sent();
-                        console.log("----", result.rows);
                         if (result.rows.length) {
                             user = result.rows[0];
                             pepper = process.env.pepper;

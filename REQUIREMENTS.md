@@ -28,22 +28,24 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Add product to order: `'/add-product' [POST]`
 
 ## Data Shapes
-#### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+#### Product Table
+-  id  `SERIAL PRIMARY KEY`
+- name `VARCHAR`
+- price `INTEGER`
+- [OPTIONAL] category `VARCHAR`
 
 #### User
-- id
-- firstName
-- lastName
-- password
+- id `SERIAL PRIMARY KEY`
+- firstName `VARCHAR`
+- lastName `VARCHAR`
+- password `VARCHAR`
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- id `SERIAL PRIMARY KEY`
+- user_id `INTEGER` `REFERENCES users(id)`
+- status_of_order (active or complete) `BOOLEAN`
 
+#### *order_products*
+- order_id `INTEGER` `REFERENCES orders(id)` 
+- product_id `INTEGER` `REFERENCES products(id)`
+- quantity `INTEGER`

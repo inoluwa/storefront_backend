@@ -73,7 +73,6 @@ describe('Testing the  endpoint for User Signin ', function () {
                         username: username,
                         password: password,
                     };
-                    console.log("mmmmm", user);
                     return [4 /*yield*/, request.post("/user/login").send(user)];
                 case 1:
                     response = _a.sent();
