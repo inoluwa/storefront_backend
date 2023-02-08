@@ -15,7 +15,7 @@ const getAllUsers = async(_req:Request, res:Response ) => {
 
 
 const show = async(req:Request, res:Response) => {
-    const user = await store.show(req.params.id)
+    const user = await store.show(Number(req.params.id))
     res.json(user)
 }
 

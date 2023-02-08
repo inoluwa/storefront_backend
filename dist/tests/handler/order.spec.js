@@ -82,7 +82,6 @@ describe('Testing the   endpoint for order ', function () {
                         user_id: userId,
                         status_of_order: true
                     };
-                    console.log("Usee>r>>", token);
                     return [4 /*yield*/, request.post("/create-order").set("Authorization", "bearer " + token).send(order)];
                 case 1:
                     response = _a.sent();

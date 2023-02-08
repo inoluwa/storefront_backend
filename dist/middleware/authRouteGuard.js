@@ -9,9 +9,9 @@ dotenv_1.default.config();
 var verifyAuthToken = function (req, res, next) {
     try {
         var authorizationHeader = req.headers.authorization;
-        console.log("Naomi has caused the error again>>>", authorizationHeader);
+        console.log("Token", authorizationHeader);
         var token = authorizationHeader.split(' ')[1];
-        var decoded = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
+        jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
         next();
     }
     catch (error) {

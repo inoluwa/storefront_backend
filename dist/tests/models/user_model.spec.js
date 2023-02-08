@@ -35,87 +35,65 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __importDefault(require("../../index"));
-var supertest_1 = __importDefault(require("supertest"));
-var request = (0, supertest_1.default)(index_1.default);
-//Test for product 
-describe('Testing the   endpoint for Product ', function () {
-    var productId;
-    var token;
+var users_1 = require("../../models/users");
+var store = new users_1.UserStore();
+describe('Testing User Model', function () {
+    var userId;
+    var userTop;
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user, userLogin, responseUserLogin, product, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    user = {
-                        username: "myheader",
+                case 0: return [4 /*yield*/, store.create({
+                        username: 'Tester',
+                        password: 'Pass233$',
+                        firstName: 'James ',
+                        lastName: 'Nelson'
+                    })];
+                case 1:
+                    userTop = _a.sent();
+                    userId = Number(userTop.id);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, store.create({
+                        username: 'myheader',
                         password: '123456',
                         firstName: 'kj',
                         lastName: 'nm'
-                    };
-                    userLogin = {
-                        username: user.username,
-                        password: user.password
-                    };
-                    return [4 /*yield*/, request.post("/user/login").send(userLogin)];
+                    })];
                 case 1:
-                    responseUserLogin = _a.sent();
-                    token = responseUserLogin.body.token;
-                    product = {
-                        "product_name": "Kettle",
-                        "price": 15,
-                        "category": "Home appliances"
-                    };
-                    return [4 /*yield*/, request.post("/product").set('Authorization', 'bearer ' + token).send(product)];
-                case 2:
-                    response = _a.sent();
-                    productId = response.body.id;
+                    user = _a.sent();
+                    expect(user.username).toEqual('myheader');
                     return [2 /*return*/];
             }
         });
     }); });
-    it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var product, response;
+    it('should show list of users', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var users;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    product = {
-                        "product_name": "Electric Fan",
-                        "price": 15,
-                        "category": "Home appliances"
-                    };
-                    return [4 /*yield*/, request.post("/product").set('Authorization', 'bearer ' + token).send(product)];
+                case 0: return [4 /*yield*/, store.getAllUsers()];
                 case 1:
-                    response = _a.sent();
-                    expect(response.statusCode).toEqual(201);
+                    users = _a.sent();
+                    expect(users.length).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('Testing  GET all Products API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
+    it('should show specific user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get("/products").set('Authorization', 'bearer ' + token)];
+                case 0: return [4 /*yield*/, store.show(userId)];
                 case 1:
-                    response = _a.sent();
-                    expect(response.statusCode).toEqual(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('Testing  GET all Products ById ', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get("/product/".concat(productId)).set('Authorization', 'bearer ' + token)];
-                case 1:
-                    response = _a.sent();
-                    expect(response.statusCode).toEqual(200);
+                    user = _a.sent();
+                    expect(user.username).toEqual(userTop.username);
                     return [2 /*return*/];
             }
         });
