@@ -13,7 +13,7 @@ const {
     TEST_POSTGRES_USER,
     ENV_CHECKER
 } = process.env
-let db;
+let db :any ;
 if(ENV_CHECKER==='dev'){
     db = new Pool({
         host:POSTGRES_HOST,

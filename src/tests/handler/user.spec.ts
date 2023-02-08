@@ -1,7 +1,7 @@
 
-import index from '../index';
+import index from '../../index';
 import supertest from 'supertest';
-import { UserStore } from '../models/users';
+import { UserStore } from '../../models/users';
 
 
 const request = supertest(index);

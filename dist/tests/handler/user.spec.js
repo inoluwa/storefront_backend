@@ -39,57 +39,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var image_transfomer_1 = __importDefault(require("../../utilities/image-transfomer"));
-var fs_1 = require("fs");
-var fs_2 = __importDefault(require("fs"));
-var path_1 = __importDefault(require("path"));
-var routes = express_1.default.Router();
-routes.get("/image", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var errorMsg, errorMissFile, filename, heightStr, widthStr, height, width, imagePath, newImageResolved, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                errorMsg = "The height/width (is) are not type number";
-                errorMissFile = "Image is not found";
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 5, , 6]);
-                filename = req.query.filename;
-                heightStr = req.query.height;
-                widthStr = req.query.width;
-                if (Number.isNaN(Number(heightStr)) || Number.isNaN(Number(widthStr))) {
-                    console.log("Error is here");
-                    throw new Error(errorMsg);
-                }
-                height = parseInt(heightStr);
-                width = parseInt(widthStr);
-                imagePath = "images/resized/".concat(filename).concat(height, "x").concat(width, ".jpg");
-                if (!!fs_2.default.existsSync(imagePath)) return [3 /*break*/, 4];
-                return [4 /*yield*/, (0, image_transfomer_1.default)(filename, height, width, errorMissFile)];
-            case 2:
-                newImageResolved = _a.sent();
-                return [4 /*yield*/, fs_1.promises.writeFile(imagePath, newImageResolved)];
-            case 3:
-                _a.sent();
-                _a.label = 4;
-            case 4:
-                res.sendFile(path_1.default.resolve(imagePath));
-                return [3 /*break*/, 6];
-            case 5:
-                error_1 = _a.sent();
-                if (error_1 == errorMsg) {
-                    res.status(400).send("errors message: ".concat(error_1));
-                }
-                else if (error_1 == errorMissFile) {
-                    res.status(404).send("errors message: ".concat(error_1));
-                }
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
-        }
-    });
-}); });
-routes.get('/', function (req, res) {
-    res.status(200);
+var index_1 = __importDefault(require("../../index"));
+var supertest_1 = __importDefault(require("supertest"));
+var request = (0, supertest_1.default)(index_1.default);
+//Test for user
+describe('Testing the  endpoint for User Signin ', function () {
+    var username = "myheader";
+    var password = '123456';
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = {
+                        username: username,
+                        password: password,
+                        firstName: 'kj',
+                        lastName: 'nm'
+                    };
+                    return [4 /*yield*/, request.post("/user/create").send(user)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = {
+                        username: username,
+                        password: password,
+                    };
+                    return [4 /*yield*/, request.post("/user/login").send(user)];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(201);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
-exports.default = routes;
+// describe('Testing the  endpoint for Middleware Guard ',() => {
+// it("should require authorization on every endpoint", (done) => {
+//   request
+//   .get("/users")
+//   .then((res) => {
+//     expect(res.status).toBe(401)
+//     done()
+//   }) 
+// });
+// });

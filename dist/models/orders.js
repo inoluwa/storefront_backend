@@ -99,7 +99,7 @@ var OrderStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2)";
+                        sql = "INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2) RETURNING *";
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();

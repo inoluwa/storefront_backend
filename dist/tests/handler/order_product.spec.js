@@ -39,41 +39,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __importDefault(require("../index"));
+var index_1 = __importDefault(require("../../index"));
 var supertest_1 = __importDefault(require("supertest"));
 var request = (0, supertest_1.default)(index_1.default);
-//Test for user
-describe('Testing the  endpoint for User Signin ', function () {
-    var username = "myheader";
-    var password = '123456';
+describe('Testing the endpoint for order-products', function () {
+    var userId;
+    var orderId;
+    var productId;
+    var token;
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+        var user, userInfo, userLogin, responseUserLogin, order, orderInfo, product, productInfo;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     user = {
-                        username: username,
-                        password: password,
+                        username: "myheader",
+                        password: '123456',
                         firstName: 'kj',
                         lastName: 'nm'
                     };
                     return [4 /*yield*/, request.post("/user/create").send(user)];
                 case 1:
-                    _a.sent();
+                    userInfo = _a.sent();
+                    userId = userInfo.body.id;
+                    userLogin = {
+                        username: user.username,
+                        password: user.password,
+                    };
+                    return [4 /*yield*/, request.post("/user/login").send(userLogin)];
+                case 2:
+                    responseUserLogin = _a.sent();
+                    token = responseUserLogin.body.token;
+                    order = {
+                        user_id: userId,
+                        status_of_order: true
+                    };
+                    return [4 /*yield*/, request.post("/create-order").set("Authorization", "bearer " + token).send(order)];
+                case 3:
+                    orderInfo = _a.sent();
+                    orderId = orderInfo.body.id;
+                    product = {
+                        product_name: "Electric Fan",
+                        price: 15,
+                        category: "Home appliances"
+                    };
+                    return [4 /*yield*/, request.post("/product").set("Authorization", "bearer " + token).send(product)];
+                case 4:
+                    productInfo = _a.sent();
+                    productId = productInfo.body.id;
                     return [2 /*return*/];
             }
         });
     }); });
-    it('Testing Create API ', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user, response;
+    it('Testing  GET product under order API', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var addProductToOrder, response;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    user = {
-                        username: username,
-                        password: password,
+                    addProductToOrder = {
+                        order_id: orderId,
+                        product_id: productId,
+                        quantity: 1
                     };
-                    return [4 /*yield*/, request.post("/user/login").send(user)];
+                    return [4 /*yield*/, request.post("/add-orderproduct").set("Authorization", "bearer " + token).send(addProductToOrder)];
                 case 1:
                     response = _a.sent();
                     expect(response.statusCode).toEqual(201);
@@ -82,13 +110,3 @@ describe('Testing the  endpoint for User Signin ', function () {
         });
     }); });
 });
-// describe('Testing the  endpoint for Middleware Guard ',() => {
-// it("should require authorization on every endpoint", (done) => {
-//   request
-//   .get("/users")
-//   .then((res) => {
-//     expect(res.status).toBe(401)
-//     done()
-//   }) 
-// });
-// });

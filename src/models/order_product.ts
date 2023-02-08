@@ -14,12 +14,23 @@ export class OrderProductStore {
             throw new Error(`Cannot get orders. Error:${err}`)
         }
     }
+    async AllOrderProductByOrderId(id: number): Promise<OrderProduct[]> {
+        try{
+            const conn = await DB.connect()
+            const sql = 'SELECT * FROM orderProduct WHERE order_id= ($1)'
+            const result = await conn.query(sql, [id])
 
+            conn.release()
+            return result.rows  
+        }catch(err) {
+            throw new Error(`Cannot get orders. Error:${err}`)
+        }
+    }
 
     async addProductToOrder(p: OrderProduct): Promise<OrderProduct> {
         try {
             const sql =
-                'INSERT INTO order_products (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *'
+                'INSERT INTO order_product (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *'
             
             const connection = await DB.connect()
 

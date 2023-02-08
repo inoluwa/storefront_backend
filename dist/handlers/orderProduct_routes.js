@@ -35,7 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var authRouteGuard_1 = __importDefault(require("../middleware/authRouteGuard"));
 var order_product_1 = require("../models/order_product");
 var store = new order_product_1.OrderProductStore();
 var getAllOrderProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -50,15 +54,29 @@ var getAllOrderProduct = function (_req, res) { return __awaiter(void 0, void 0,
         }
     });
 }); };
+var getAllProductsUnderOrderId = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orderId, orderProducts;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                orderId = Number(req.params.orderid);
+                return [4 /*yield*/, store.AllOrderProductByOrderId(orderId)];
+            case 1:
+                orderProducts = _a.sent();
+                res.status(200).json(orderProducts);
+                return [2 /*return*/];
+        }
+    });
+}); };
 var addProductToOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var order_id, product_id, quantity, product, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                order_id = parseInt(req.params.id);
-                product_id = parseInt(req.body.product_id);
-                quantity = parseInt(req.body.quantity);
+                order_id = Number(req.body.order_id);
+                product_id = Number(req.body.product_id);
+                quantity = Number(req.body.quantity);
                 if (!order_id || !product_id || !quantity) {
                     return [2 /*return*/, res.status(400).json({
                             error: 'One or more required parameters missing',
@@ -71,7 +89,7 @@ var addProductToOrder = function (req, res) { return __awaiter(void 0, void 0, v
                     })];
             case 1:
                 product = _a.sent();
-                res.status(200).json(product);
+                res.status(201).json(product);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -84,6 +102,7 @@ var addProductToOrder = function (req, res) { return __awaiter(void 0, void 0, v
 }); };
 var orderProductRoutes = function (app) {
     app.get('/order-products', getAllOrderProduct);
-    app.post('/add-product', addProductToOrder);
+    app.get('/order-products/:orderid', getAllProductsUnderOrderId);
+    app.post('/add-orderproduct', authRouteGuard_1.default, addProductToOrder);
 };
 exports.default = orderProductRoutes;

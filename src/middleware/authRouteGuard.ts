@@ -7,9 +7,11 @@ dotenv.config()
 
 const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
     try {
+        
         const authorizationHeader = req.headers.authorization as string
+        console.log("Token", authorizationHeader)
         const token = authorizationHeader.split(' ')[1]
-        const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string)
+        jwt.verify(token, process.env.SECRET_KEY as string)
 
         next()
     } catch (error) {

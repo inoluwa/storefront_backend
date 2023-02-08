@@ -33,7 +33,7 @@ export class OrderStore {
 
     async create(o:Order): Promise<Order | null> {
         try {
-            const sql = `INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2)`
+            const sql = `INSERT INTO orders ( user_id, status_of_order) VALUES ($1, $2) RETURNING *`
             const conn = await DB.connect()
             const result = await conn.query(sql, [  o.user_id, o.status_of_order  ])
             if(result.rows.length){

@@ -68,14 +68,38 @@ var OrderProductStore = /** @class */ (function () {
             });
         });
     };
-    OrderProductStore.prototype.addProductToOrder = function (p) {
+    OrderProductStore.prototype.AllOrderProductByOrderId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, connection, result, err_2;
+            var conn, sql, result, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = 'INSERT INTO order_products (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
+                        return [4 /*yield*/, database_1.default.connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = 'SELECT * FROM orderProduct WHERE order_id= ($1)';
+                        return [4 /*yield*/, conn.query(sql, [id])];
+                    case 2:
+                        result = _a.sent();
+                        conn.release();
+                        return [2 /*return*/, result.rows];
+                    case 3:
+                        err_2 = _a.sent();
+                        throw new Error("Cannot get orders. Error:".concat(err_2));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrderProductStore.prototype.addProductToOrder = function (p) {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, connection, result, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        sql = 'INSERT INTO order_product (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         connection = _a.sent();
@@ -89,8 +113,8 @@ var OrderProductStore = /** @class */ (function () {
                         connection.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
-                        err_2 = _a.sent();
-                        throw new Error("Product could not be added. Error: ".concat(err_2));
+                        err_3 = _a.sent();
+                        throw new Error("Product could not be added. Error: ".concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });

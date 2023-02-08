@@ -1,5 +1,6 @@
 import express, {Request, Response}from 'express'
 import { Order } from '../interfaces/order.interface'
+import verifyAuthToken from '../middleware/authRouteGuard'
 import { OrderStore} from '../models/orders'
 
 
@@ -12,7 +13,8 @@ const allOrders = async(_req:Request, res:Response ) => {
 
 
 const getCurrentuserOrder = async(req:Request, res:Response) => {
-    const orderByUser = await store.currentUserOrder(req.body.user_id)
+    const userId= Number(req.params.id);
+    const orderByUser = await store.currentUserOrder(userId)
     res.status(200).json(orderByUser);
 }
 
@@ -23,7 +25,6 @@ const create = async(req:Request, res:Response) => {
             user_id: req.body.user_id,
             status_of_order: req.body.status_of_order
         }
-
        const newOrders = await store.create(orders)
        res.status(201).json(newOrders)
      }catch(err) {
@@ -33,9 +34,9 @@ const create = async(req:Request, res:Response) => {
 }
 
 const orderRoutes = (app: express.Application) => {
-    app.get('/orders', allOrders)
-    app.get('/current-user/:id', getCurrentuserOrder)
-    app.post('/create-order', create)
+    app.get('/orders', verifyAuthToken, allOrders)
+    app.get('/current-user/:id', verifyAuthToken, getCurrentuserOrder)
+    app.post('/create-order', verifyAuthToken, create)
   }
   
   export default orderRoutes
