@@ -1,5 +1,6 @@
 import { UserStore } from "../../models/users";
 import { Users } from "../../interfaces/user.interface";
+import verifyAuthToken from "../../middleware/authRouteGuard";
 
 const store = new UserStore()
 
@@ -38,5 +39,10 @@ describe('Testing User Model', () => {
         const user = await store.show(userId) 
         expect(user.username).toEqual(userTop.username)
     })
+
+    // it('should sign-in a user', async() => {
+    //     const userSignIn =await store.signIn(userTop.username, userTop.password)
+    //     expect(userSignIn?.username && userSignIn.password).toEqual(userTop.username && userTop.password) 
+    // })
 })
 

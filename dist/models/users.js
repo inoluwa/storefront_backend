@@ -101,32 +101,9 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
-    UserStore.prototype.deleteAllRecord = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, database_1.default.connect()];
-                    case 1:
-                        conn = _a.sent();
-                        sql = "Delete FROM users  ";
-                        return [4 /*yield*/, conn.query(sql)];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/, true];
-                    case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Cannot get users. Error:".concat(err_3));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
     UserStore.prototype.show = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, conn, result, err_4;
+            var sql, conn, result, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -141,8 +118,8 @@ var UserStore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Couldn't find user with ".concat(id, ". Error:").concat(err_4));
+                        err_3 = _a.sent();
+                        throw new Error("Couldn't find user with ".concat(id, ". Error:").concat(err_3));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -150,7 +127,7 @@ var UserStore = /** @class */ (function () {
     };
     UserStore.prototype.create = function (u) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, pepper, saltRounds, conn, hash, result, user, err_5;
+            var sql, pepper, saltRounds, conn, hash, result, user, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -172,9 +149,9 @@ var UserStore = /** @class */ (function () {
                         user = result.rows[0];
                         return [2 /*return*/, user];
                     case 3:
-                        err_5 = _a.sent();
-                        console.log(err_5);
-                        throw new Error("Couldn't create user. Error:".concat(err_5));
+                        err_4 = _a.sent();
+                        console.log(err_4);
+                        throw new Error("Couldn't create user. Error:".concat(err_4));
                     case 4: return [2 /*return*/];
                 }
             });

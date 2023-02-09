@@ -54,7 +54,7 @@ var OrderProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM orderProduct';
+                        sql = 'SELECT * FROM order_product';
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -78,7 +78,7 @@ var OrderProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM orderProduct WHERE order_id= ($1)';
+                        sql = 'SELECT * FROM order_product WHERE order_id= ($1)';
                         return [4 /*yield*/, conn.query(sql, [id])];
                     case 2:
                         result = _a.sent();

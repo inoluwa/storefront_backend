@@ -40,18 +40,6 @@ export class UserStore {
             throw new Error(`Cannot get users. Error:${err}`)
         }
     }
-    async deleteAllRecord(): Promise<boolean> {
-        try{
-            //cleaning up all the information before insert the new record
-            const conn = await DB.connect()
-            const sql = `Delete FROM users  `
-            await conn.query(sql )
-            return true;  
-      
-        }catch(err) {
-            throw new Error(`Cannot get users. Error:${err}`)
-        }
-    }
 
     async show(id:number): Promise<Users> {
         try{

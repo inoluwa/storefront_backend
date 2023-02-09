@@ -5,7 +5,7 @@ export class OrderProductStore {
     async AllOrderProduct(): Promise<OrderProduct[]> {
         try{
             const conn = await DB.connect()
-            const sql = 'SELECT * FROM orderProduct'
+            const sql = 'SELECT * FROM order_product'
             const result = await conn.query(sql)
 
             conn.release()
@@ -17,7 +17,7 @@ export class OrderProductStore {
     async AllOrderProductByOrderId(id: number): Promise<OrderProduct[]> {
         try{
             const conn = await DB.connect()
-            const sql = 'SELECT * FROM orderProduct WHERE order_id= ($1)'
+            const sql = 'SELECT * FROM order_product WHERE order_id= ($1)'
             const result = await conn.query(sql, [id])
 
             conn.release()

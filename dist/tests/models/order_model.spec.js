@@ -36,70 +36,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var products_1 = require("../../models/products");
+var orders_1 = require("../../models/orders");
 var users_1 = require("../../models/users");
-var store = new users_1.UserStore();
-describe('Testing User Model', function () {
+var store = new products_1.ProductStore();
+var orderStore = new orders_1.OrderStore();
+var userStore = new users_1.UserStore();
+describe('Order Model', function () {
+    var product;
+    var productId;
+    var user;
     var userId;
-    var userTop;
+    var order;
+    var orderId;
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create({
-                        username: 'Tester',
-                        password: 'Pass233$',
-                        firstName: 'James ',
-                        lastName: 'Nelson'
+                case 0: return [4 /*yield*/, store.createProduct({
+                        "product_name": "Electric Fan",
+                        "price": 15,
+                        "category": "Home appliances",
                     })];
                 case 1:
-                    userTop = _a.sent();
-                    userId = Number(userTop.id);
+                    product = _a.sent();
+                    productId = product.id;
+                    return [4 /*yield*/, userStore.create({
+                            username: 'myheader',
+                            password: '123456',
+                            firstName: 'kj',
+                            lastName: 'nm'
+                        })];
+                case 2:
+                    user = _a.sent();
+                    userId = user.id;
                     return [2 /*return*/];
             }
         });
     }); });
-    it('should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+    it('should create an order', function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create({
-                        username: 'myheader',
-                        password: '123456',
-                        firstName: 'kj',
-                        lastName: 'nm'
+                case 0: return [4 /*yield*/, orderStore.create({
+                        user_id: userId,
+                        status_of_order: true
                     })];
                 case 1:
-                    user = _a.sent();
-                    expect(user.username).toEqual('myheader');
+                    order = _a.sent();
+                    orderId = order === null || order === void 0 ? void 0 : order.id;
+                    expect(orderId).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('should show list of users', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var users;
+    it('should get current user order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var orderCurrentUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.getAllUsers()];
+                case 0: return [4 /*yield*/, orderStore.currentUserOrder(userId)];
                 case 1:
-                    users = _a.sent();
-                    expect(users.length).toBeGreaterThan(0);
+                    orderCurrentUser = _a.sent();
+                    expect(orderCurrentUser.user_id).toEqual(userId);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('should show specific user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+    it('should return all orders', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var allOrders;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.show(userId)];
+                case 0: return [4 /*yield*/, orderStore.getAllOrders()];
                 case 1:
-                    user = _a.sent();
-                    expect(user.username).toEqual(userTop.username);
+                    allOrders = _a.sent();
+                    expect(allOrders.length).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
     }); });
-    // it('should sign-in a user', async() => {
-    //     const userSignIn =await store.signIn(userTop.username, userTop.password)
-    //     expect(userSignIn?.username && userSignIn.password).toEqual(userTop.username && userTop.password) 
-    // })
 });
