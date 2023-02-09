@@ -20,12 +20,12 @@ describe('Order-product Model', () => {
 
     beforeAll(async () => {
       const userTop = await userStore.create({
-            username: 'Test',
+            username: 'Test'+Date.now(),
             password: 'Pass275',
             firstName: 'Kunle ',
             lastName: 'Oyewusi'
         })
-        userId=Number(userTop.id);
+        userId=userTop?.id as number;
 
 
         const  product = await productStore.createProduct({

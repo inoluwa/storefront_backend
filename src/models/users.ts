@@ -54,12 +54,20 @@ export class UserStore {
         }
     }
 
-    async create(u:Users): Promise<Users> {
+    async create(u:Users): Promise<Users| null> {
         try {
+            
+         
             const sql = `INSERT INTO users (username, lastname, firstname, password) VALUES ($1, $2, $3, $4) RETURNING  *`
             const  pepper=process.env.pepper
             const  saltRounds=process.env.saltRounds as string
             const conn = await DB.connect()
+
+            const sqlcheckUser = `SELECT * FROM users where username= ($1) `
+            const resultUser = await conn.query(sqlcheckUser, [u.username] )
+if(resultUser.rows.length<0){
+    return null;
+}
             const hash = bcrypt.hashSync(
                 u.password + pepper, 
                 parseInt(saltRounds)

@@ -54,14 +54,14 @@ describe('Order-product Model', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, userStore.create({
-                        username: 'Test',
+                        username: 'Test' + Date.now(),
                         password: 'Pass275',
                         firstName: 'Kunle ',
                         lastName: 'Oyewusi'
                     })];
                 case 1:
                     userTop = _a.sent();
-                    userId = Number(userTop.id);
+                    userId = userTop === null || userTop === void 0 ? void 0 : userTop.id;
                     return [4 /*yield*/, productStore.createProduct({
                             "product_name": "Monitor",
                             "price": 90,

@@ -41,35 +41,38 @@ var store = new users_1.UserStore();
 describe('Testing User Model', function () {
     var userId;
     var userTop;
+    var userInfo = {
+        username: 'James' + Date.now(),
+        password: 'Pass233$',
+        firstName: 'James ',
+        lastName: 'Nelson'
+    };
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create({
-                        username: 'Tester',
-                        password: 'Pass233$',
-                        firstName: 'James ',
-                        lastName: 'Nelson'
-                    })];
+                case 0: return [4 /*yield*/, store.create(userInfo)];
                 case 1:
                     userTop = _a.sent();
-                    userId = Number(userTop.id);
+                    userId = userTop === null || userTop === void 0 ? void 0 : userTop.id;
                     return [2 /*return*/];
             }
         });
     }); });
     it('should create user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+        var userModel, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, store.create({
-                        username: 'myheader',
+                case 0:
+                    userModel = {
+                        username: 'myheader' + Date.now(),
                         password: '123456',
                         firstName: 'kj',
                         lastName: 'nm'
-                    })];
+                    };
+                    return [4 /*yield*/, store.create(userModel)];
                 case 1:
                     user = _a.sent();
-                    expect(user.username).toEqual('myheader');
+                    expect(userModel === null || userModel === void 0 ? void 0 : userModel.username).toEqual(userModel.username);
                     return [2 /*return*/];
             }
         });
@@ -93,13 +96,21 @@ describe('Testing User Model', function () {
                 case 0: return [4 /*yield*/, store.show(userId)];
                 case 1:
                     user = _a.sent();
-                    expect(user.username).toEqual(userTop.username);
+                    expect(user.username).toEqual(userInfo.username);
                     return [2 /*return*/];
             }
         });
     }); });
-    // it('should sign-in a user', async() => {
-    //     const userSignIn =await store.signIn(userTop.username, userTop.password)
-    //     expect(userSignIn?.username && userSignIn.password).toEqual(userTop.username && userTop.password) 
-    // })
+    it('should sign-in a user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var userSignIn;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, store.signIn(userInfo.username, userInfo.password)];
+                case 1:
+                    userSignIn = _a.sent();
+                    expect(userInfo.username).toEqual(userSignIn === null || userSignIn === void 0 ? void 0 : userSignIn.username);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });

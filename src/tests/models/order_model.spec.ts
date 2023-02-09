@@ -14,7 +14,7 @@ const userStore = new UserStore()
 describe('Order Model', () => {
     let product:Product;
     let productId:number;
-    let user:Users;
+    let user:Users | null;
 
     let userId:number;
     let order: Order | null;
@@ -35,7 +35,7 @@ describe('Order Model', () => {
             firstName: 'kj',
             lastName: 'nm'
         })
-        userId = user.id as number
+        userId = user?.id as number
 
         })
 

@@ -44,7 +44,7 @@ var supertest_1 = __importDefault(require("supertest"));
 var request = (0, supertest_1.default)(index_1.default);
 //Test for user
 describe('Testing the  endpoint for User Signin ', function () {
-    var username = "myheader";
+    var username = "Username" + Date.now();
     var password = '123456';
     beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
         var user;

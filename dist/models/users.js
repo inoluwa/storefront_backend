@@ -127,32 +127,39 @@ var UserStore = /** @class */ (function () {
     };
     UserStore.prototype.create = function (u) {
         return __awaiter(this, void 0, void 0, function () {
-            var sql, pepper, saltRounds, conn, hash, result, user, err_4;
+            var sql, pepper, saltRounds, conn, sqlcheckUser, resultUser, hash, result, user, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _a.trys.push([0, 4, , 5]);
                         sql = "INSERT INTO users (username, lastname, firstname, password) VALUES ($1, $2, $3, $4) RETURNING  *";
                         pepper = process.env.pepper;
                         saltRounds = process.env.saltRounds;
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
+                        sqlcheckUser = "SELECT * FROM users where username= ($1) ";
+                        return [4 /*yield*/, conn.query(sqlcheckUser, [u.username])];
+                    case 2:
+                        resultUser = _a.sent();
+                        if (resultUser.rows.length < 0) {
+                            return [2 /*return*/, null];
+                        }
                         hash = bcryptjs_1.default.hashSync(u.password + pepper, parseInt(saltRounds));
                         return [4 /*yield*/, conn.query(sql, [u.username, u.firstName, u.lastName, hash])
                             //console.log(user)
                         ];
-                    case 2:
+                    case 3:
                         result = _a.sent();
                         //console.log(user)
                         conn.release();
                         user = result.rows[0];
                         return [2 /*return*/, user];
-                    case 3:
+                    case 4:
                         err_4 = _a.sent();
                         console.log(err_4);
                         throw new Error("Couldn't create user. Error:".concat(err_4));
-                    case 4: return [2 /*return*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

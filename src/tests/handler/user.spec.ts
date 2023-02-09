@@ -8,7 +8,7 @@ const request = supertest(index);
 
 //Test for user
 describe('Testing the  endpoint for User Signin ',() => {
-  const username = "myheader";
+  const username = "Username"+Date.now();
   const password= '123456';
   beforeAll(async () => {
   const user =  {

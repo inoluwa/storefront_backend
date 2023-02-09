@@ -6,28 +6,31 @@ const store = new UserStore()
 
 describe('Testing User Model', () => {
     let userId: number;
-    let userTop:Users;
-    beforeAll(async () => {
-       
+    let userTop:Users | null;
+    const userInfo: Users= {
       
-         userTop = await store.create({
-            username: 'Tester',
-            password: 'Pass233$',
-            firstName: 'James ',
-            lastName: 'Nelson'
-        })
-        userId=Number(userTop.id);
+        username: 'James'+Date.now(),
+        password: 'Pass233$',
+        firstName: 'James ',
+        lastName: 'Nelson'
+    }
+    beforeAll(async () => {
+    
+      
+         userTop = await store.create(userInfo)
+        userId=userTop?.id as number;
       
       })
 
     it('should create user', async() => {
-    const user:Users = await store.create({
-        username: 'myheader',
-        password: '123456',
-        firstName: 'kj',
-        lastName: 'nm'
-    })
-     expect(user.username).toEqual('myheader')
+        const userModel:Users= {
+            username: 'myheader'+Date.now(),
+            password: '123456',
+            firstName: 'kj',
+            lastName: 'nm'
+        }
+    const user= await store.create(userModel)
+     expect(userModel?.username).toEqual(userModel.username)
     })
 
     it('should show list of users', async() =>{
@@ -37,12 +40,12 @@ describe('Testing User Model', () => {
 
     it('should show specific user', async() => {
         const user = await store.show(userId) 
-        expect(user.username).toEqual(userTop.username)
+        expect(user.username).toEqual(userInfo.username)
     })
 
-    // it('should sign-in a user', async() => {
-    //     const userSignIn =await store.signIn(userTop.username, userTop.password)
-    //     expect(userSignIn?.username && userSignIn.password).toEqual(userTop.username && userTop.password) 
-    // })
+    it('should sign-in a user', async() => {
+        const userSignIn =await store.signIn(userInfo.username, userInfo.password);
+        expect(userInfo.username).toEqual(userSignIn?.username as string)
+    })
 })
 

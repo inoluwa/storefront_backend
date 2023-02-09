@@ -68,7 +68,7 @@ describe('Order Model', function () {
                         })];
                 case 2:
                     user = _a.sent();
-                    userId = user.id;
+                    userId = user === null || user === void 0 ? void 0 : user.id;
                     return [2 /*return*/];
             }
         });
