@@ -2,7 +2,7 @@
 
 
 ## Getting Started
-The Environment variable needed (.env):
+The DEV Environment variable needed (.env):
 - POSTGRES_HOST=localhost
 - POSTGRES_DB=project_db
 - POSTGRES_USER=postgres
@@ -12,7 +12,15 @@ The Environment variable needed (.env):
 - pepper=#####
 - SECRET_KEY=blalablue
 
-
+### Test DB Configuration
+- POSTGRES_HOST=localhost
+- TEST_POSTGRES_DB=project_db_test
+- TEST_POSTGRES_USER=postgres
+- POSTGRES_PASSWORD=####
+- POSTGRES_PORT=5432
+- saltRounds=10
+- pepper=#####
+- SECRET_KEY=blalablue
 
 
 ## Set up
