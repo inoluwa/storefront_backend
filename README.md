@@ -16,11 +16,11 @@ The DEV Environment variable needed (.env):
 - POSTGRES_HOST=localhost
 - TEST_POSTGRES_DB=project_db_test
 - TEST_POSTGRES_USER=postgres
-- POSTGRES_PASSWORD=####
+- POSTGRES_PASSWORD=####$$$$
 - POSTGRES_PORT=5432
 - saltRounds=10
-- pepper=#####
-- SECRET_KEY=blalablue
+- pepper=#####$$$$
+- SECRET_KEY=football_fans
 
 
 ## Set up
